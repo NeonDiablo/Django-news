@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ user.username }} Account
+{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'news/css/others/user_account.css' %}">
+{% endblock %}
+{% block content %}
+<section class="vw-100" style="background-color: #f4f5f7;">
+    <div  class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col col-lg-6 mb-4 mb-lg-0">
+          <div class="card mb-3" style="border-radius: .5rem;">
+            <div class="row g-0">
+              <div class="col-md-4 gradient-custom text-center text-white"
+                style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
+                <img src="{{avatar_mod.avatar.url}}"
+                  alt="Avatar" class="img-fluid mt-5 mb-3" 
+                  style="width: 100px; height: 100px; border-radius: 50%;" />
+                    {% if form %}
+                    <form action="" method="POST"  enctype="multipart/form-data" class="user_profile_img">
+                      {% csrf_token %}
+                      {% for field  in form %}
+                        {{ field }}
+                      {% endfor %}
+                      <button style="width: 85px; height:20px; font-size:x-small;" type="submit">Change Image</button>
+                    </form>
+                    {% endif %}
+                  <h5 style="color:black; margin-top:15px">{{user.username}}</h5>
+                <p>Web Designer</p>
+                <i class="far fa-edit mb-5"></i>
+              </div>
+              <div class="col-md-8">
+                <div class="card-body p-4">
+                  <h6>Information</h6>
+                  <hr class="mt-0 mb-4">
+                  <div class="row pt-1">
+                    <div class="col-6 mb-3">
+                      <h6>Email</h6>
+                      <p class="text-muted">{{user.email}}</p>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>Posts</h6>
+                        <p class="text-muted">{% if posts %} <a href="{% url 'user_news' user.pk %}">{{posts.count}}</a> {% else %}Not creating Posts {% endif %}</p>
+                    </div>
+                  </div>
+                 
+                  <hr class="mt-0 mb-4">
+                  <div class="row pt-1">
+                    <div class="col-6 mb-3">
+                      <h6>Recent</h6>
+                      <p class="text-muted">{{user.last_login |date:'G:i  d.m.y'}}</p>
+                    </div>
+                    <div class="col-6 mb-3">
+                      <h6>Comments</h6>
+                      <p class="text-muted">
+                        {% if comments %} {{ comments }}
+                        {% else %}
+                            You have no comments yet
+                        {% endif%}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+{% endblock %}

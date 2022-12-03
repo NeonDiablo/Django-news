@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'news/css/others/styles.css'%}">
+{% endblock %}
+
+{% block title %}
+  {{page_title}}
+{% endblock %}
+{% block content %}
+    
+{% if posts %}
+    <div class="news_content"> <!-- row -->
+      <div class="news_blocks"> <!-- column -->
+        
+            {% for post in posts %}
+              <div class="news"> <!-- row -->
+                
+                  <div class="date">{{ post.date | date:'G:i  d.m.y'}}</div>
+                  <div class="text"><a href="{% url 'single_news' post.pk %}">{{ post.title }}</a></div>
+                  <div class="image" style="margin-right:5px">
+                    <img src="{% static 'news/img/159078.png' %}" alt="eye icon" width="20px" height="20px">
+                     {{post.total_views }}   
+                </div>
+                
+                
+              </div>   
+            {% endfor %}
+            
+            <div class="pagination_posts" style="display: flex; flex-direction: row; margin: 15px auto;">
+              <nav aria-label="...">
+              <ul class="pagination">
+
+                {% if posts.has_previous %}
+                 <li class="page-item ">
+                    <a class="page-link" href="?page={{posts.previous_page_number}}"> <
+                    </a>
+                  </li>
+                {% endif %}
+                {% for page in posts.paginator.page_range %}
+                  {% if page == posts.number %}
+                  <li class="page-item active ">
+                    <a class="page-link" href="?page={{page}}">{{page}}
+                    </a>
+                  {% elif page > posts.number|add:-3 and page <= posts.number|add:3 %}
+                    <li class="page-item ">
+                      <a class="page-link" href="?page={{page}}">{{page}}
+                      </a>
+                    </li>
+                  {% endif %}
+
+                 
+                  
+                {% endfor %}
+                
+                {% if posts.has_next %}
+                 <li class="page-item ">
+                    <a class="page-link" href="?page={{posts.next_page_number}}"> >
+                    </a>
+                  </li>
+                {% endif %}
+              </nav>
+              
+              
+            </div>
+      </div>
+
+      {% block sidebar %}
+        {% include '_other/_sidebar.html'%}
+      {% endblock %}
+      
+  </div>
+{% else %}
+  <h1 style="text-align: center;">Empty :(</h1>
+{% endif %}
+{% endblock %}
+

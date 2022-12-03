@@ -1,0 +1,140 @@
+a{
+    color:black;
+}
+
+.post_title{
+    text-decoration: underline rgba(0, 0, 0, 0.11);
+}
+
+h2{
+    font-size: 25px;
+    font-weight: 200;
+}
+
+.sidebar_news a{
+    text-decoration: dotted;
+    color: #0a28e6;
+}
+
+.main {
+    display:flex;
+    flex-direction: row;
+    padding: 15px;
+    flex:1;
+}
+
+
+.post{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    overflow-wrap: break-word;
+    width:65vh;
+    flex:2;
+    align-items: center;
+}
+
+.post_text{
+    border-bottom:1px solid black;
+}
+
+.sidebar_news{
+    border-radius: 15px;
+    background-color: #a9d6d678;
+    padding:2px;
+    margin-left:15px; 
+    flex:1;
+    max-width: 20vw;
+}
+
+.sidebar_title{
+    display: flex;
+    justify-content: center;
+    font-size: 25px;
+}
+
+.cat{
+    color:rgba(8, 126, 126, 0.856);
+    padding-left: 15px;
+    padding-top:5px;
+}
+
+.form{
+    padding-left: 15px;
+    padding-top: 5px;
+}
+
+.form a{
+    color: rgb(14, 72, 110);
+}
+
+.form a:nth-child(2){
+    color: rgb(179, 2, 2);
+    margin-left:15px;
+    text-decoration: none;
+}
+
+.form_sad{
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}
+
+.form{
+    margin:0 10px;
+}
+
+@media (max-width:900px) {
+    .main{
+        flex-direction: column;
+    }
+    .post{
+        width:auto;
+    }
+    .sidebar_news{
+        max-width: 80vw;
+        margin-top: 20px;
+        align-self: center;
+    }
+}
+
+@media (max-width:450px) {
+    h1{
+        font-size: 7vw;
+    }
+    h2{
+        font-size: 5vw;
+    }
+    
+}
+
+.sidebar_news a:hover{
+    text-decoration: none;
+    color: #0400ff;
+    transition: .5s;
+}
+
+.comments_block {
+    margin-top:20px;
+    border:1px solid purple;
+    display: flex;
+    flex-direction: column;
+    width: 75vw;
+}
+
+.comments_title{
+    font-size: 3vw;
+    color: rgb(13, 20, 128);
+    display: flex;
+    justify-content: center;
+}
+
+.comments{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border: 1px dashed blueviolet;
+    padding:10px;
+    margin:10px
+}
+

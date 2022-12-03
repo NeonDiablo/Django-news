@@ -1,0 +1,7 @@
+
+
+.user_profile_img{
+    display:flex; 
+    flex-direction: column; 
+    margin-left: 27px;
+}

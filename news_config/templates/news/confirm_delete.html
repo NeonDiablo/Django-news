@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+
+{% block title %}'Confirm delete {% endblock %}
+{% block content %}
+<center>
+    <div class="content">
+        
+        <div class="back">
+            
+            <div class="form">
+                <form action="" method="post">
+                    Are you sure?
+                    {{form}}
+                    {% csrf_token%}
+                    <div class="btn_row">
+                        <button type="submit" style="margin-right:5px;
+                        padding:5px 15px; display:block; margin-top:15px;"
+                        class="btn btn-outline-danger"> 
+                                        Delete
+                        </button>
+
+                        <a href="{% url 'home' %}" class="btn btn-outline-success"
+                        style="margin-right:5px; padding:5px 15px;
+                         display:block; margin-top:15px;">
+                                To the main page
+                        </a>
+                        
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+</center>
+    <style>
+        .content{
+            display: flex;
+            justify-content: center;
+            width: 40vw;
+            margin:20px;
+
+        }
+       .back{
+        padding: 0% 10%;
+        width: fit-content;
+        margin: 0 auto;
+       
+       }
+    
+       .msg_error{
+            margin-top: 20px;
+       }
+
+       .captcha{
+        display:block;
+       }
+    </style>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% load static %}
+
+<style>
+  a{color: black;}
+</style>
+
+<nav class="navbar navbar-expand-lg bg-light border-bottom border-primary"> 
+    <div class="container-fluid">
+      <a class="navbar-brand h1 m-2" href="{% url 'home' %}">D - N - P</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active h2 m-2" aria-current="page" href="{% url 'home' %}">Home</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle h2 m-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Categories
+            </a>
+            <ul class="dropdown-menu">
+              {% if categories %}
+
+                {% for category in categories %}
+                <li class="m-1"><hr class="dropdown-divider">
+                      <a href="{% url 'category_news' category.category_name %}" class="text-decoration-none">{{ category.category_name}}</a>
+                    </li>
+                {% endfor %}
+
+              {% else %}
+                Categories have not yet been created
+              {% endif%}
+                <hr class="dropdown-divider">
+            </ul>
+          </li>
+
+          <li class="nav-item">
+            {% if request.user.is_authenticated %}
+                <a class="nav-link h2 m-2" href="{% url 'create_news'%}">Create Post</a>
+            {% endif %}
+          </li>
+        </ul>
+        
+        <form class="d-flex" role="search" method="POST" action="{% url 'search_news' %}" style="margin-right:14px;">
+          {% csrf_token %} 
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searched">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+
+        <ul class="navbar-nav mb-2 mb-lg-0">
+        <li class="nav-item">
+          {% if request.user.is_authenticated %}
+          <span style="display: flex; align-items: center;">
+            <a href="{% url 'user_account' request.user.pk %}" class="nav-link h2 m-2">
+              
+              <img src="{% static 'news/img/user_icon.png'%}" alt="User Icon" width="35px">
+            </a>
+            <a href="{% url 'news_logout' %}" style="display:inline-block; padding:0px;" class="nav-link h2 m-2">Logout</a>    
+          </span>
+          {% else %}
+            <span>
+                <a href="{% url 'news_login' %}" style="display:inline-block; padding:0px;" class="nav-link h2 m-2">Login</a> /
+                <a href="{% url 'news_register' %}" style="display:inline-block; padding:0px;" class="nav-link h2 m-2">Registration</a>
+            </span>
+          {% endif %}
+        </li>
+      </ul>
+
+      </div>
+    </div>
+  </nav>

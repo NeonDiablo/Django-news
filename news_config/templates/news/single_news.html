@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {{single_post.title|truncatewords:5 }}
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'news/css/others/single_news_styles.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="m-2 cat">
+    <a href="{% url 'home'%}">Categories</a>> --> <a href="{% url 'category_news' single_post.category %}">{{single_post.category}}</a>
+                    <img src="{% static 'news/img/159078.png' %}" alt="eye icon" width="20px" height="20px" style="margin-left:15px;">
+                    <span style="color: black;">{{single_post.total_views }}  </span>
+                
+</div>
+  {% if single_post.user.username == request.user.username %}
+    <div class="m-2 form">
+        <a href="{% url 'change_news' single_post.pk %}">Add changes</a>
+        <a href="{% url 'delete_news' single_post.pk %}">Delete</a>
+    </div>  
+    
+  {% endif %}
+     <div class="main" style="overflow-x: hidden;">  <!--row -->
+        <div class="post"> <!-- column -->
+            <div class="post_title">
+                <h1>{{single_post.title}}</h1>
+            </div>
+            <br>
+            <div class="post_text">
+                <h2>{{single_post.text|safe}}</h2>
+            </div>
+            
+            <div class="comments_block">
+                <div class="comments_title">
+                    Comments [{{comments.count}}]
+                </div>
+                {% for comment in comments %}
+                <div class="comments" style="padding: 10px;">
+                    <p class="font-weight-bold">
+                      
+                      <a href="{% url 'user_account' comment.name.user.pk %}" 
+                         style="font-size: large; text-decoration: none;">
+
+                        <img src="{{ comment.name.avatar.url }}" alt="avatar" 
+                             width="40" height="40" style="border-radius: 50%; margin-right: 3px;">
+                        {{ comment.name }}
+                        
+                      </a>
+                      <span class=" text-muted font-weight-normal">
+                        {{ comment.created_on }}
+                      </span>
+                    </p>
+                    {{ comment.body | linebreaks }}
+                  </div>
+                {% endfor %}
+                  {% if user.is_authenticated %}
+                <div class="comment_form_section">
+                    <div class="form_body">
+                      {% if new_comment %}
+                      <div class="alert alert-success" role="alert" style="font-size: 2vw; text-align: center;">
+                        Your comment is awaiting moderation
+                      </div>
+                      {% else %}
+                      <h3 class="text-center">Leave a comment</h3>
+                      <form method="post" style="margin-top: 1.3em;">
+                        {% for field in comment_form %}
+                        <div class="form_sad">
+                            <p>Input your comment</p> {{field}}
+                            <button type="submit" class="btn btn-primary  btn-lg">Send</button>
+                        </div>
+                        {% endfor %}
+                        {% csrf_token %}
+                        
+                      </form>
+                      {% endif %}
+                    {% endif%}
+                    </div>
+                  </div>
+                {% if not user.is_authenticated %}
+                  {% include '_other/_sidebar.html'%}
+                {% endif %}
+            </div>
+            
+        </div>
+    {% if user.is_authenticated %}
+      {% include '_other/_sidebar.html'%}
+    {% endif %}
+</div>
+{% endblock %}

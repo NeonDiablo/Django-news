@@ -1,0 +1,8 @@
+<div class="sidebar_news">
+    <span class="sidebar_title m-auto">Hot news</span>
+      <ul>
+          {% for sp in side_posts %}
+          <li class="m-auto"><a href="{% url 'single_news' sp.pk %}">{{ sp.title }}</a></li>
+          {% endfor%}
+      </ul>
+  </div>
