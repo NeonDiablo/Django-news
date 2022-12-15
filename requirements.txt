@@ -1,0 +1,4 @@
+Django==4.1
+django_ckeditor==6.5.1
+django_debug_toolbar==3.7.0
+django_recaptcha==3.0.0
