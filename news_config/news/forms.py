@@ -28,6 +28,8 @@ class RegisterForm(forms.Form):
 
     email = forms.EmailField(max_length=25,
                     widget=forms.EmailInput({'class':'email'}))
+    
+    captcha = CaptchaField()
 
     
 class CreateForm(forms.ModelForm):

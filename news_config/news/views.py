@@ -7,9 +7,9 @@ from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.http import Http404
 from .forms import *
-from django.views.decorators.cache import cache_page
+# from django.views.decorators.cache import cache_page
 from django.core.exceptions import ObjectDoesNotExist
-
+from django.contrib import messages as msg
 
 
 def get_ip(request):
@@ -112,7 +112,6 @@ def search_news(request):
 def news_login(request):
     form = LoginForm()
     categories = Category.objects.all()
-    msg = []
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -123,13 +122,12 @@ def news_login(request):
                 login(request, user)
                 return redirect('home')
             else:
-                msg = 'Something is entered incorrectly'
+                msg.error(request, 'Something is entered incorrectly')
 
         else:
-            msg = 'Form is not valid'
+            msg.error(request, 'Form is not valid')
     
     return render(request, 'news/news_login.html', {'form':form,
-                                                    'msg':msg,
                                                     'categories':categories,
                                                     'title':'Login',
                                                     })
@@ -143,7 +141,6 @@ def news_logout(request):
 def news_register(request):
     form = RegisterForm()
     categories = Category.objects.all()
-    msg = []
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -153,24 +150,27 @@ def news_register(request):
             email = form.cleaned_data['email']
             user = User.objects.all()
             
-            if password1 != password2:
-                msg = 'Passwords must be the same'
 
-            elif user.filter(username=username):
-                msg = 'Username already busy'
-            
+            if user.filter(username=username):
+                msg.error(request, 'Username already busy')
+
+            elif password1 != password2:
+                msg.error(request, 'Passwords must be the same')
+
             elif user.filter(email=email):
-                msg = 'This email is already registered'
+                msg.error(request, 'This email is already registered')
 
             else:
-                user = User.objects.create(username=username, password=make_password(password1), email=email)
+                user = User.objects.create(username=username, email=email,
+                                           password=make_password(password1))
+
                 UserProfile.objects.create(user=user)
-                return  redirect('home')
+                login(request, user=user)
+                return redirect('user_account', userpk=user.pk)
         else:
-            msg = 'Form not valid'
+            msg.error(request, 'Form not valid')
                 
     return render(request, 'news/news_login.html', {'form':form,
-                                                    'msg':msg,
                                                     'categories':categories,
                                                     'title':'Register',
                                                     }) 
@@ -178,7 +178,6 @@ def news_register(request):
 @login_required()
 def create_news(request):
     categories = Category.objects.all()
-    msg = ''
     form = CreateForm()
     if request.method == 'POST':
         form = CreateForm(request.POST)
@@ -188,15 +187,14 @@ def create_news(request):
             saved_object.save()
             return redirect('single_news', pk=saved_object.pk)
         else:
-            msg = 'Form not valid'
+            msg.error(request, 'Form not valid')
             
             
     return render(request, 'news/create_change_news.html', {'form':form,
-                                                     'categories':categories,
-                                                     'msg':msg,
-                                                     'title':'Create Post',
-                                                     'btn':'Create',
-                                                     })
+                                                            'categories':categories,
+                                                            'title':'Create Post',
+                                                            'btn':'Create',
+                                                            })
 
 #@cache_page(60)
 def user_account(request, userpk):
@@ -251,7 +249,6 @@ def change_news(request, pk):
 
     if request.user == single_post.user:
         categories = Category.objects.all()
-        msg = ''
         form = ChangeForm(instance=single_post)
 
         if request.method == 'POST':
@@ -262,12 +259,11 @@ def change_news(request, pk):
 
                 return redirect('single_news', pk=saved_object.pk)
             else:
-                msg = 'Form not valid'
+                msg.error(request, 'Form not valid')
                 
                 
         return render(request, 'news/create_change_news.html', {'form':form,
                                                         'categories':categories,
-                                                        'msg':msg,
                                                         'title':'Change post',
                                                         'btn':'Change',
                                                         })

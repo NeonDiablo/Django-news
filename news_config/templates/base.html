@@ -12,6 +12,13 @@
 </head>
 <body>
     {% include '_other/_nav.html' %}
+    {% if messages %}
+        {% for msg in messages %}
+        <div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
+            {{ msg }}
+          </div>
+        {% endfor %}
+    {% endif %}
     {% block content %}
 
     {% endblock %}
